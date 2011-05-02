@@ -48,6 +48,40 @@ class RulesSpec extends FlatSpec with ShouldMatchers {
     }) should equal ("Max length of name is 5 characters.")
   }
 
+  "minLength StringRule" should "enforce length on value" in {
+    class Test(val name: String) extends Validation {
+      override def validate = {
+        check("name", StringRules.minLength(3), "Minimum length of name is 3 characters.")
+        failures
+      }
+    }
+
+    (new Test("DM").validate match {
+      case Some(e) => e.get("name").get.head
+      case _ => throw new Exception("Failed.")
+    }) should equal ("Minimum length of name is 3 characters.")
+  }
+
+  "lengthRange StringRule" should "enforce length range on value" in {
+    val error = "Name should be between 3 and 10 characters"
+    class Test(val name: String) extends Validation {
+      override def validate = {
+        check("name", StringRules.lengthRange(3,10), error)
+        failures
+      }
+    }
+
+    (new Test("DM").validate match {
+      case Some(e) => e.get("name").get.head
+      case _ => throw new Exception("Failed.")
+    }) should equal (error)
+
+    (new Test("David McLaughlin").validate match {
+      case Some(e) => e.get("name").get.head
+      case _ => throw new Exception("Failed.")
+    }) should equal (error)
+  }
+
   "isEmail StringRule" should "enforce email format on a field" in {
     class Test(val email: String) extends Validation {
       override def validate = {

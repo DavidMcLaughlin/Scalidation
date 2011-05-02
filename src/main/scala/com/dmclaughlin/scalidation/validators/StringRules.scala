@@ -10,6 +10,12 @@ object StringRules {
   def maxLength(n: Int)(s: String): Boolean =
     s.length <= n
 
+  def minLength(n: Int)(s: String): Boolean =
+    s.length >= n
+
+  def lengthRange(from: Int, to: Int)(s: String): Boolean =
+    minLength(from)(s) && maxLength(to)(s)
+
   def matches(r: Regex)(s: String): Boolean = {
     s match {
       case r(s) => true
