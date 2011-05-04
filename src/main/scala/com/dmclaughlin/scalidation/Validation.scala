@@ -1,7 +1,7 @@
 package com.dmclaughlin.scalidation
 
 trait Validation {
-  private val fails = new Failures
+  private val fails = Failures()
 
   def failures:Option[Failures] = {
     if(fails.isEmpty) None else Some(fails)
